@@ -9,7 +9,31 @@
 */
 
 function calculateTotalSpentByCategory(transactions) {
-  return [];
+  var categoryToListIndexMappings = {};
+  var output = [];
+
+  transactions.forEach(transaction => {
+    if(!(transaction.category in categoryToListIndexMappings)){
+      var outputObj = {}
+
+      //Since mapping for this category doesn't exist yet, add a mapping with the currentIndex
+      categoryToListIndexMappings[transaction.category] = output.length;
+
+      //Add new category object to output list
+      outputObj["category"] = transaction.category;
+      outputObj["totalSpent"] = transaction.price;
+
+      output.push(outputObj);
+    }
+    else{
+      //If category already exists then get the index of the category and add to the totalSpent amount
+      var categoryIndex = categoryToListIndexMappings[transaction.category];
+      output[categoryIndex]["totalSpent"] += transaction.price;
+    }
+
+  });
+
+  return output;
 }
 
 module.exports = calculateTotalSpentByCategory;
